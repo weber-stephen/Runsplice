@@ -1,8 +1,12 @@
 # Runsplice: deterministic agent replay
 
-**Public beta.** Runsplice supports the paths in the matrix below; each has a different replay boundary.
+**Change one response. See where an agent run diverges.** Public beta.
 
-`Runsplice` helps answer why an agent run failed and what changes after one model or tool response is corrected. Its bundled delivery example records a package tool reporting `delivered` while the fixture model answers `in transit`. Inspect the saved steps, replace the final response, and compare the fork with the original. [Product intent](docs/PRODUCT_INTENT.md) describes the replay contract.
+Runsplice helps answer why a Python agent run failed and what changes after one model or tool response is corrected. In the bundled delivery example, the package tool reports `delivered` while the fixture model answers `in transit`. Replacing that answer produces `delivered` in a separate fork; the original run remains intact. [See the verified terminal output](docs/demo/terminal-demo.md).
+
+![Runsplice timeline showing an original invoice run and its selected stale tool result](docs/demo/invoice-timeline.png)
+
+This is an original recorded run, not a fork. The [evidence notes](docs/demo/evidence.md) describe the capture.
 
 ## Support at a glance
 
@@ -20,7 +24,7 @@ Logs and traces show what the original run did. Runsplice lets you test one chan
 
 ## Quick start: delivery run
 
-From this checkout, use Python 3.11 or newer. These shell commands use a POSIX shell. Installation may need access to the package index for `setuptools`.
+From this checkout, use Python 3.11 or newer. These shell commands use a POSIX shell. Installation may need access to the package index for `setuptools`. The first recording needs no Docker engine or API key. `record` accepts only the three bundled example modules; use the [SDK wrappers](docs/SDK.md) for your own supported agent.
 
 ```sh
 python3 -m venv .agentdbg/venv
@@ -86,10 +90,6 @@ After the quick start, run `runsplice --store .agentdbg/store ui` to open the lo
 
 Choose a recorded run to inspect its outcome and relevant evidence. It opens at the first **Example diagnosis** when available, otherwise the first failed step, otherwise the final step. Diagnoses and expected answers belong to the bundled fixtures; SDK captures show observations without claiming a cause. The recorded outcome is followed by the timeline and playback, then the selected step’s evidence and actions. The selected step shows bounded request, response, and state-change previews before **Raw data**. Model steps have a collapsed **Context** section for message changes, byte counts, and repeated tool-output candidates. Byte counts are not provider token counts; Claude exposes submitted context, not its internal model context.
 
-![Current timeline showing the original invoice run and its selected stale tool result](docs/demo/invoice-timeline.png)
-
-This screenshot shows an original recorded run in the current UI. The [evidence notes](docs/demo/evidence.md) describe the capture; it does not show a fork.
-
 Response tests and unchanged replays appear beneath their recording, including replays of derived runs. Each derived run compares with its immediate source; copied overrides from earlier steps do not count as a new response edit. A response test opens on labeled recorded and test answers, outcome, edited response, first observed difference, first changed request, and execution stop. Moments at the same step are combined. The edited step opens automatically with up to five changed response or request fields. **Previous step** and **Next step** work without opening the timeline. **Raw data** contains the complete, separately labeled payloads; **Show full timeline**, above the selected-step evidence, expands aligned recorded and test steps in that position. A blocked request is a useful result: the corrected response changed the request, so replay cannot supply a saved response. It does not imply a new answer. An environment failure such as missing Docker is labeled as a replay diagnostic, not request divergence. Unconfirmed substitutions and limited captures state what cannot be established. An earlier difference in a live branch is not attributed to a later edited response.
 
 Use **Test a different response** beside eligible recorded-step evidence. The JSON editor previews the replacement and explains the provider's guarantees before submission. Offline examples resume a saved checkpoint in Linux Docker without live calls. OpenAI SDK tests rerun a new session from the beginning, use saved responses while requests match, and stop at a changed request unless live continuation is explicitly allowed. Claude tool tests require acknowledgment of a live session branch; the selected tool call must recur, and model responses remain view-only. The original recording is preserved. Inapplicable actions show their reason. Live execution details and capture limits appear with the selected run rather than being implied by an offline label.
@@ -112,6 +112,6 @@ Without `--capture-content`, runs are metadata-only and cannot replay. `--redact
 
 ## Contributing and security
 
-Run `python -m unittest discover -s tests -v`; Docker integration tests run when a Linux engine is available and otherwise skip. To check authenticated SDK behavior, follow the [SDK setup](docs/SDK.md), install both extras, set `AGENTDBG_LIVE_TESTS=1` and the provider credentials, then run `python -m unittest tests.test_sdk_live -v`. These optional tests make billable provider calls and are excluded from CI. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes and [SECURITY.md](SECURITY.md) for private vulnerability reporting. The project is licensed under [MIT](LICENSE).
+Run `python -m unittest discover -s tests -v`; Docker integration tests run when a Linux engine is available and otherwise skip. To check authenticated SDK behavior, follow the [SDK setup](docs/SDK.md), install both extras, set `AGENTDBG_LIVE_TESTS=1` and the provider credentials, then run `python -m unittest tests.test_sdk_live -v`. These optional tests make billable provider calls and are excluded from CI. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, [SECURITY.md](SECURITY.md) for private vulnerability reporting, and [the release checklist](docs/RELEASING.md) for versioning and verification. The project is licensed under [MIT](LICENSE).
 
 The development history before this public snapshot remains available in the [Agent Replay Lab archive](https://github.com/weber-stephen/Agent-Replay-Lab).
