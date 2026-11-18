@@ -1,5 +1,7 @@
 # Runsplice: deterministic agent replay
 
+**Public beta.** Runsplice supports the paths in the matrix below; each has a different replay boundary.
+
 `Runsplice` helps answer why an agent run failed and what changes after one model or tool response is corrected. Its bundled delivery example records a package tool reporting `delivered` while the fixture model answers `in transit`. Inspect the saved steps, replace the final response, and compare the fork with the original. [Product intent](docs/PRODUCT_INTENT.md) describes the replay contract.
 
 ## Support at a glance
