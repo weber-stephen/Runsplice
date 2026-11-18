@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "runsplice"
+version = "0.1.0"
+description = "Runsplice: deterministic agent recording and replay"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+
+[project.urls]
+Homepage = "https://github.com/weber-stephen/Runsplice"
+Repository = "https://github.com/weber-stephen/Runsplice"
+
+[project.optional-dependencies]
+openai = ["openai-agents>=0.24,<0.25"]
+claude = ["claude-agent-sdk>=0.2.182,<0.3", "pydantic-core>=2"]
+
+[project.scripts]
+runsplice = "agentdbg.cli:main"
+agentdbg = "agentdbg.cli:main"
+
+[tool.setuptools.package-data]
+agentdbg = ["web/index.html", "web/assets/*", "web/vendor/webawesome/**/*"]

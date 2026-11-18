@@ -1,0 +1,55 @@
+name: Release smoke
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  offline-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - run: python -m pip install '.[openai,claude]'
+      - run: python -m unittest tests.test_sdk_sessions -v
+      - name: Record, replay, fork, and diff both examples
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+          import tempfile
+          from pathlib import Path
+
+          def command(*args):
+              result = subprocess.run(args, check=True, text=True, capture_output=True)
+              print('$', ' '.join(args))
+              print(result.stdout, end='')
+              return result.stdout
+
+          with tempfile.TemporaryDirectory() as temp:
+              for name, module, step, fixture, expected in (
+                  ('delivery', 'agentdbg.delivery_example', '2', 'corrected-delivery-answer.json', 'replayed'),
+                  ('invoice', 'agentdbg.example', '2', 'corrected-tool-result.json', 'blocked'),
+              ):
+                  store = str(Path(temp) / name)
+                  print(f'=== {name} ===')
+                  record = command('runsplice', '--store', store, 'record', '--capture-content', '--', 'python', '-m', module)
+                  original = record.split()[1]
+                  command('runsplice', '--store', store, 'inspect', original, '--step', step)
+                  replay = command('runsplice', '--store', store, 'replay', original, '--from', '1')
+                  assert replay.split()[1] == 'replayed', replay
+                  fork = command('runsplice', '--store', store, 'fork', original, '--step', step,
+                                 '--response', f'tests/fixtures/{fixture}')
+                  assert fork.split()[1] == expected, fork
+                  diff = command('runsplice', '--store', store, 'diff', original, fork.split()[0])
+                  assert 'first changed response' in diff, diff
+                  if name == 'delivery':
+                      assert 'in transit → delivered' in diff, diff
+                  else:
+                      assert 'blocked' in diff, diff
+                  original_after = command('runsplice', '--store', store, 'inspect', original, '--step', step)
+                  assert 'wrong_answer' in original_after and 'origin=recorded' in original_after
+          PY
