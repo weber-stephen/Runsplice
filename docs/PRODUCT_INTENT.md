@@ -6,7 +6,7 @@ An agent developer needs to answer: **Why did this run fail, and what would happ
 
 ## Use cases
 
-| Use case | What the developer checks | Prototype status |
+| Use case | What the developer checks | Beta support |
 | --- | --- | --- |
 | A stale invoice lookup produces an `unpaid` answer | Inspect the stale tool result and the later model request; substitute `paid` and identify the first changed request | Bundled example; the fork blocks at the changed request |
 | A delivery model says `in transit` after a tool reports `delivered` | Replace the final model response and compare the answer | Bundled example; the fork completes with `delivered` |
@@ -20,7 +20,7 @@ The blocked examples are useful results: they show the point where a corrected r
 
 Replay restores saved agent state in a fresh process and supplies captured responses only when the next model or tool request matches the recorded request. A developer can override a selected response; an unmatched request is **blocked**. The original run remains intact and the fork is saved separately. Step origins identify recorded, overridden, and blocked behavior.
 
-This does not reproduce a model's hidden behavior, rewind an external service, or guarantee the same result from a fresh live call. The current prototype makes no live model or tool calls during replay. Live calls after divergence are an intended possibility, not a current CLI feature; any future partly live fork must be labeled as such.
+This does not reproduce a model's hidden behavior, rewind an external service, or guarantee the same result from a fresh live call. Bundled offline replay makes no live model or tool calls. SDK live branches have separate guarantees and must be labeled as live.
 
 ## Integration boundary and current scope
 
@@ -34,4 +34,4 @@ Arbitrary agent hosts and OpenTelemetry export remain future directions. SDK int
 
 Full request, response, and state capture is opt-in because it may retain credentials or personal data. Redaction and size limits can make a run unreplayable; inspection must show that limitation. Replay must never restore files over a developer's working files or execute an external write without an explicit mock response.
 
-The product succeeds when a developer can inspect a seeded failure, replay the same captured path, substitute one response, locate the first divergence, and understand whether the final answer changed or replay stopped. The [README](../README.md) contains the commands and the prototype's operational limits.
+The product succeeds when a developer can inspect a failure, substitute one response, locate the first divergence, and understand whether the final answer changed or replay stopped. The [README](../README.md) contains the supported commands and beta limits.
