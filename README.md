@@ -1,12 +1,14 @@
-# Runsplice: deterministic agent replay
+# Runsplice
 
-**Change one response. See where an agent run diverges.** Public beta.
+*Change one response. See where the run goes.*
 
-Runsplice helps answer why a Python agent run failed and what changes after one model or tool response is corrected. In the bundled delivery example, the package tool reports `delivered` while the fixture model answers `in transit`. Replacing that answer produces `delivered` in a separate fork; the original run remains intact. [See the verified terminal output](docs/demo/terminal-demo.md).
+**Public beta.** Runsplice supports the paths in the matrix below; each has a different replay boundary.
 
-![Runsplice timeline showing an original invoice run and its selected stale tool result](docs/demo/invoice-timeline.png)
+In the bundled delivery example, a package tool reports `delivered` while the fixture model answers `in transit`. Runsplice records the steps, lets you replace that response, and shows whether the answer changes or replay stops. [Product intent](docs/PRODUCT_INTENT.md) describes the replay contract.
 
-This is an original recorded run, not a fork. The [evidence notes](docs/demo/evidence.md) describe the capture.
+![Original recorded invoice run with the stale tool result selected](docs/demo/invoice-timeline.png)
+
+This is an **original recorded invoice run**, not a fork. [Capture notes](docs/demo/evidence.md) explain what the screenshot shows.
 
 ## Support at a glance
 
@@ -24,7 +26,9 @@ Logs and traces show what the original run did. Runsplice lets you test one chan
 
 ## Quick start: delivery run
 
-From this checkout, use Python 3.11 or newer. These shell commands use a POSIX shell. Installation may need access to the package index for `setuptools`. The first recording needs no Docker engine or API key. `record` accepts only the three bundled example modules; use the [SDK wrappers](docs/SDK.md) for your own supported agent.
+From this checkout, use Python 3.11 or newer. These shell commands use a POSIX shell. **Install from this checkout:** `python -m pip install .` does not install a published PyPI package. Installation may need access to the package index for `setuptools`. The `record` command below accepts the three bundled example modules only; this first recording needs no Docker engine or API key. The [verified terminal demo](docs/demo/terminal-demo.md) shows the expected output.
+
+**Captured content may contain private data.** `--capture-content` stores full requests, responses, state, and checkpoint files. Redaction may miss an unexpected secret or personal detail. Keep `.agentdbg/` private, inspect captures before sharing them, and avoid committing them. Metadata-only runs cannot replay.
 
 ```sh
 python3 -m venv .agentdbg/venv
@@ -46,10 +50,6 @@ runsplice --store .agentdbg/store diff RUN_ID FORK_ID
 ```
 
 Copy `FORK_ID` from the fork output. The unchanged run and corrected fork end in `replayed`; the diff identifies the changed response at step 2 and shows `answer: in transit → delivered`. The original run remains intact. Docker may pull `python:3.11-slim` on first use.
-
-See the [terminal demo](docs/demo/terminal-demo.md) for recorded output and verified Linux Docker replay, fork, and diff results for delivery and invoice.
-
-**Captured content may contain private data.** `--capture-content` stores full requests, responses, state, and checkpoint files. Redaction may miss an unexpected secret or personal detail. Keep `.agentdbg/` private, inspect captures before sharing them, and avoid committing them. Metadata-only runs cannot replay.
 
 ## Other offline examples
 
@@ -112,6 +112,6 @@ Without `--capture-content`, runs are metadata-only and cannot replay. `--redact
 
 ## Contributing and security
 
-Run `python -m unittest discover -s tests -v`; Docker integration tests run when a Linux engine is available and otherwise skip. To check authenticated SDK behavior, follow the [SDK setup](docs/SDK.md), install both extras, set `AGENTDBG_LIVE_TESTS=1` and the provider credentials, then run `python -m unittest tests.test_sdk_live -v`. These optional tests make billable provider calls and are excluded from CI. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, [SECURITY.md](SECURITY.md) for private vulnerability reporting, and [the release checklist](docs/RELEASING.md) for versioning and verification. The project is licensed under [MIT](LICENSE).
+Run `python -m unittest discover -s tests -v`; Docker integration tests run when a Linux engine is available and otherwise skip. To check authenticated SDK behavior, follow the [SDK setup](docs/SDK.md), install both extras, set `AGENTDBG_LIVE_TESTS=1` and the provider credentials, then run `python -m unittest tests.test_sdk_live -v`. These optional tests make billable provider calls and are excluded from CI. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, [SECURITY.md](SECURITY.md) for private vulnerability reporting, and the [release checklist](docs/RELEASING.md) for version and GitHub label checks. The project is licensed under [MIT](LICENSE).
 
 The development history before this public snapshot remains available in the [Agent Replay Lab archive](https://github.com/weber-stephen/Agent-Replay-Lab).
