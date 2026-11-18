@@ -26,7 +26,7 @@ Logs and traces show what the original run did. Runsplice lets you test one chan
 
 ## Quick start: delivery run
 
-From this checkout, use Python 3.11 or newer. These shell commands use a POSIX shell. **Install from this checkout:** `python -m pip install .` does not install a published PyPI package. Installation may need access to the package index for `setuptools`. The `record` command below accepts the three bundled example modules only. The [verified terminal demo](docs/demo/terminal-demo.md) shows the expected output.
+From this checkout, use Python 3.11 or newer. These shell commands use a POSIX shell. **Install from this checkout:** `python -m pip install .` does not install a published PyPI package. Installation may need access to the package index for `setuptools`. The `record` command below accepts the three bundled example modules only; this first recording needs no Docker engine or API key. The [verified terminal demo](docs/demo/terminal-demo.md) shows the expected output.
 
 **Captured content may contain private data.** `--capture-content` stores full requests, responses, state, and checkpoint files. Redaction may miss an unexpected secret or personal detail. Keep `.agentdbg/` private, inspect captures before sharing them, and avoid committing them. Metadata-only runs cannot replay.
 
