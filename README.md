@@ -12,6 +12,10 @@
 
 The SDK wrappers do not import existing conversations. Offline replay makes no live model or tool calls. [SDK setup and limits](docs/SDK.md) explains the provider-specific behavior.
 
+## Why this workflow
+
+Logs and traces show what the original run did. Runsplice lets you test one changed model or tool response, preserve the original, and inspect the first difference. In the bundled offline examples, it supplies saved responses only while requests match; a changed request is marked `blocked`. That visible stop tells you exactly where the captured run can no longer establish an outcome. SDK forks have the separate guarantees shown above.
+
 ## Quick start: delivery run
 
 From this checkout, use Python 3.11 or newer. These shell commands use a POSIX shell. Installation may need access to the package index for `setuptools`.
