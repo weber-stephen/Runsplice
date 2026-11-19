@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "runsplice"
-version = "0.2.0b1"
+version = "0.2.0b2"
 description = "Runsplice: deterministic agent recording and replay"
 readme = "README.md"
 license = {text = "MIT"}

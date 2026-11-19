@@ -20,6 +20,8 @@ This is an **original recorded invoice run**, not a fork. [Capture notes](docs/d
 
 The SDK wrappers do not import existing conversations. Offline replay makes no live model or tool calls. [SDK setup and limits](docs/SDK.md) explains the provider-specific behavior.
 
+The OpenAI fork path has mocked test coverage, but an authenticated OpenAI fork was not rerun for `0.2.0b2`. Validate it with disposable credentials before relying on it in your own agent.
+
 ## Why this workflow
 
 Logs and traces show what the original run did. Runsplice lets you test one changed model or tool response, preserve the original, and inspect the first difference. In the bundled offline examples, it supplies saved responses only while requests match; a changed request is marked `blocked`. That visible stop tells you exactly where the captured run can no longer establish an outcome. SDK forks have the separate guarantees shown above.
@@ -113,5 +115,3 @@ Without `--capture-content`, runs are metadata-only and cannot replay. `--redact
 ## Contributing and security
 
 Run `python -m unittest discover -s tests -v`; Docker integration tests run when a Linux engine is available and otherwise skip. To check authenticated SDK behavior, follow the [SDK setup](docs/SDK.md), install both extras, set `AGENTDBG_LIVE_TESTS=1` and the provider credentials, then run `python -m unittest tests.test_sdk_live -v`. These optional tests make billable provider calls and are excluded from CI. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, [SECURITY.md](SECURITY.md) for private vulnerability reporting, and the [release checklist](docs/RELEASING.md) for version and GitHub label checks. The project is licensed under [MIT](LICENSE).
-
-The development history before this public snapshot remains available in the [Agent Replay Lab archive](https://github.com/weber-stephen/Agent-Replay-Lab).
