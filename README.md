@@ -20,6 +20,8 @@ This is an **original recorded invoice run**, not a fork. [Capture notes](docs/d
 
 The SDK wrappers do not import existing conversations. Offline replay makes no live model or tool calls. [SDK setup and limits](docs/SDK.md) explains the provider-specific behavior.
 
+The OpenAI fork path has mocked test coverage, but an authenticated OpenAI fork was not rerun for `0.2.0b2`. Validate it with disposable credentials before relying on it in your own agent.
+
 ## Why this workflow
 
 Logs and traces show what the original run did. Runsplice lets you test one changed model or tool response, preserve the original, and inspect the first difference. In the bundled offline examples, it supplies saved responses only while requests match; a changed request is marked `blocked`. That visible stop tells you exactly where the captured run can no longer establish an outcome. SDK forks have the separate guarantees shown above.
