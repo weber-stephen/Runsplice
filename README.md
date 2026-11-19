@@ -113,5 +113,3 @@ Without `--capture-content`, runs are metadata-only and cannot replay. `--redact
 ## Contributing and security
 
 Run `python -m unittest discover -s tests -v`; Docker integration tests run when a Linux engine is available and otherwise skip. To check authenticated SDK behavior, follow the [SDK setup](docs/SDK.md), install both extras, set `AGENTDBG_LIVE_TESTS=1` and the provider credentials, then run `python -m unittest tests.test_sdk_live -v`. These optional tests make billable provider calls and are excluded from CI. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes, [SECURITY.md](SECURITY.md) for private vulnerability reporting, and the [release checklist](docs/RELEASING.md) for version and GitHub label checks. The project is licensed under [MIT](LICENSE).
-
-The development history before this public snapshot remains available in the [Agent Replay Lab archive](https://github.com/weber-stephen/Agent-Replay-Lab).

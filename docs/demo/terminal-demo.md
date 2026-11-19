@@ -55,7 +55,7 @@ The `inspect` block is a verbatim excerpt with the duration and state delta omit
 
 ## Linux Docker replay and response experiments
 
-The [Ubuntu release smoke job](https://github.com/weber-stephen/Agent-Replay-Lab/actions/runs/44393008223/job/135115376241) ran the complete CLI flows on 2026-11-18. These are excerpts of its actual output; the runner used a temporary store and deleted it after the job. Both original runs were inspected again afterward and remained `wrong_answer` with `origin=recorded` at the edited step.
+The [public Ubuntu release smoke job](https://github.com/weber-stephen/Runsplice/actions/runs/44422331617/job/135218208348) verifies the complete CLI flows. The excerpts below came from an earlier run of the same smoke script on 2026-11-18; its temporary store was deleted after the job. Both original runs were inspected again afterward and remained `wrong_answer` with `origin=recorded` at the edited step.
 
 ```console
 === delivery ===
